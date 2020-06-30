@@ -1,0 +1,54 @@
+from datetime import datetime
+import requests
+from dateutil import parser
+
+
+class ReadJson(object):
+    def __init__(self):
+        self.url = 'https://www.cbr-xml-daily.ru/daily_json.js'
+        self.js = None
+        self.month = datetime.datetime.now().month - 1
+        self.year = datetime.datetime.now().year
+        if self.month == 0:
+            self.month = 12
+            self.year -= 1
+
+    def __call__(self):
+        while True:
+            self.js = self.get_json()
+            js_month, js_year = self.get_date()
+            if js_month == self.month and js_year == self.year:
+                usd = self.get_USD()
+                eur = self.get_EUR()
+                jpy = self.get_JPY()
+                cny = self.get_CNY()
+                # добавление в базу
+                self.url = 'https:' + self.js['PreviousURL']
+            elif js_month < self.month and js_year <= self.year:
+                break
+
+        def get_json(self):
+            return requests.get(self.url).json()
+
+        def get_EUR(self):
+            return self.js['Valute']['EUR']['Value']
+
+        def get_USD(self):
+            return self.js['Valute']['USD']['Value']
+
+        def get_JPY(self):
+            return self.js['Valute']['JPY']['Value']
+
+        def get_CNY(self):
+            return self.js['Valute']['CNY']['Value']
+
+        def get_date(self):
+            js_date = parser.parse(self.js['Date'])
+            return js_date.month, js_date.year
+
+
+
+
+
+
+
