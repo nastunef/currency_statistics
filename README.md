@@ -8,3 +8,4 @@
 </p>
 <p>Cохраняется для каждой валюты статистика в рублях в базу MySQL.</p>
 <p>По собранной статистике рисуется график c помощью chart.js.</p>
+![Иллюстрация](https://github.com/nastunef/currency_statistics/blob/master/results.png)
