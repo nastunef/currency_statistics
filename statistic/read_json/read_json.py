@@ -16,17 +16,21 @@ class ReadJson(object):
 
     def __call__(self):
         while True:
+            # читаем файл
             self.js = self.get_json()
-            js_data = self.get_date().date()
-            if js_data.month == self.month and js_data.year == self.year:
+            # смотрим дату данных
+            js_date = self.get_date().date()
+            # если нужный месяц и год
+            if js_date.month == self.month and js_date.year == self.year:
                 # добавление в базу
-                st = Statistics(data= js_data, usd= self.get_valuta_value('USD'),
-                                eur= self.get_valuta_value('EUR'),
-                                jpy= self.get_valuta_value('JPY'),
-                                cny= self.get_valuta_value('CNY')
+                st = Statistics(data=js_date, usd=self.get_valuta_value('USD'),
+                                eur=self.get_valuta_value('EUR'),
+                                jpy=self.get_valuta_value('JPY'),
+                                cny=self.get_valuta_value('CNY')
                                 )
                 st.save()
-            elif js_data.month < self.month and js_data.year <= self.year:
+            # если еще не дошли до него
+            elif js_date.month < self.month and js_date.year <= self.year:
                 break
             # получаем следующий url файла
             self.url = 'https:' + self.js['PreviousURL']
@@ -39,10 +43,3 @@ class ReadJson(object):
 
     def get_date(self):
         return parser.parse(self.js['Date'])
-
-
-
-
-
-
-
