@@ -17,7 +17,7 @@ class ReadJson(object):
     def __call__(self):
         while True:
             self.js = self.get_json()
-            js_data = self.get_date()
+            js_data = self.get_date().date()
             if js_data.month == self.month and js_data.year == self.year:
                 # добавление в базу
                 st = Statistics(data= js_data, usd= self.get_valuta_value('USD'),
