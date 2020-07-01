@@ -1,7 +1,7 @@
 from datetime import datetime
 import requests
 from dateutil import parser
-from statistic.models import *
+from statistic.models import Statistics
 
 
 class ReadJson(object):

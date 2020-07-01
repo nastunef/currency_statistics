@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-{% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>Статистика валют за прошлый месяц</title>
+    <title>Статистика за прошлый месяц</title>
 </head>
 <body>
 <div style="width:80%; margin: auto">
@@ -13,7 +12,6 @@
     <button id="btn_cny">в юанях</button>
     <button id="btn_jpy">в иенах</button>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 <script>
     var data_eur = {{ eur|safe }}
@@ -38,21 +36,19 @@
                 backgroundColor: 'rgba(54, 162, 235, 0.9)',
                 borderColor: 'rgba(54, 162, 235, 0.9)',
                 data: data_usd,
-            },
-                {
-                    label: 'CNY',
-                    fill: false,
-                    backgroundColor: 'rgba(75, 192, 192, 0.9)',
-                    borderColor: 'rgba(75, 192, 192, 0.9)',
-                    data: data_cny,
-                },
-                {
-                    label: 'JPY',
-                    fill: false,
-                    backgroundColor: 'rgba(153, 102, 255, 0.9)',
-                    borderColor: 'rgba(153, 102, 255, 0.9)',
-                    data: data_jpy,
-                }]
+            }, {
+                label: 'CNY',
+                fill: false,
+                backgroundColor: 'rgba(75, 192, 192, 0.9)',
+                borderColor: 'rgba(75, 192, 192, 0.9)',
+                data: data_cny,
+            }, {
+                label: 'JPY',
+                fill: false,
+                backgroundColor: 'rgba(153, 102, 255, 0.9)',
+                borderColor: 'rgba(153, 102, 255, 0.9)',
+                data: data_jpy,
+            }]
         },
         options: {
             responsive: true,
@@ -91,39 +87,42 @@
         var ctx = document.getElementById('canvas').getContext('2d');
         window.myLine = new Chart(ctx, config);
     };
+
     document.getElementById('btn_rub').addEventListener('click', function () {
         config.data.datasets = updateDatasets(config.data.datasets, new Array(data_jpy.length).fill(1))
-        config.options.scales.yAxes = getYAxex('в рублях')
+        config.options.scales.yAxes = getYAxes('в рублях')
         window.myLine.update();
     });
+
     document.getElementById('btn_eur').addEventListener('click', function () {
         config.data.datasets = updateDatasets(config.data.datasets, data_eur)
-        config.options.scales.yAxes = getYAxex('в евро')
+        config.options.scales.yAxes = getYAxes('в евро')
         window.myLine.update();
     });
+
     document.getElementById('btn_usd').addEventListener('click', function () {
         config.data.datasets = updateDatasets(config.data.datasets, data_usd)
-        config.options.scales.yAxes = getYAxex('в долларах')
+        config.options.scales.yAxes = getYAxes('в долларах')
         window.myLine.update();
     });
 
     document.getElementById('btn_jpy').addEventListener('click', function () {
         config.data.datasets = updateDatasets(config.data.datasets, data_jpy)
-        config.options.scales.yAxes = getYAxex('в иенах')
+        config.options.scales.yAxes = getYAxes('в иенах')
         window.myLine.update();
     });
 
     document.getElementById('btn_cny').addEventListener('click', function () {
         config.data.datasets = updateDatasets(config.data.datasets, data_cny)
-        config.options.scales.yAxes = getYAxex('в юанях')
+        config.options.scales.yAxes = getYAxes('в юанях')
         window.myLine.update();
     });
 
-    function updateDatasets(datasets, data){
-        datasets.push(updateData(datasets.shift(),data_eur, data))
-        datasets.push(updateData(datasets.shift(),data_usd, data))
-        datasets.push(updateData(datasets.shift(),data_cny, data))
-        datasets.push(updateData(datasets.shift(),data_jpy, data))
+    function updateDatasets(datasets, data) {
+        datasets.push(updateData(datasets.shift(), data_eur, data))
+        datasets.push(updateData(datasets.shift(), data_usd, data))
+        datasets.push(updateData(datasets.shift(), data_cny, data))
+        datasets.push(updateData(datasets.shift(), data_jpy, data))
         return datasets
     }
 
@@ -135,14 +134,13 @@
             data: [],
             fill: false
         };
-
         for (var index = 0; index < config.data.labels.length; ++index) {
             newDataset.data.push((valute1[index] / valute2[index]).toFixed(4));
         }
         return newDataset;
-    };
+    }
 
-    function getYAxex(valute) {
+    function getYAxes(valute) {
         return [{
             display: true,
             scaleLabel: {
@@ -150,8 +148,7 @@
                 labelString: 'Значение' + valute
             }
         }]
-
-    };
+    }
 </script>
 </body>
 </html>
